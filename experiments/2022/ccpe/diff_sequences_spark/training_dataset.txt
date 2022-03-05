@@ -1,0 +1,504 @@
+[Experiment Index 1]
+omega_w = r5.large
+iota_w = 1
+gamma_w = 2
+M = 56
+R = 28
+runtime_in_seconds = 27.82
+
+[Experiment Index 3]
+omega_w = r5.large
+iota_w = 4
+gamma_w = 2
+M = 2
+R = 1
+runtime_in_seconds = 12.91
+
+[Experiment Index 6]
+omega_w = r5.xlarge
+iota_w = 1
+gamma_w = 4
+M = 992
+R = 496
+runtime_in_seconds = 103.11
+
+[Experiment Index 7]
+omega_w = r5.xlarge
+iota_w = 3
+gamma_w = 4
+M = 2
+R = 1
+runtime_in_seconds = 11.32
+
+[Experiment Index 8]
+omega_w = r5.xlarge
+iota_w = 5
+gamma_w = 4
+M = 240
+R = 120
+runtime_in_seconds = 23.69
+
+[Experiment Index 9]
+omega_w = r5.xlarge
+iota_w = 5
+gamma_w = 4
+M = 2
+R = 1
+runtime_in_seconds = 11.38
+
+[Experiment Index 10]
+omega_w = r5.xlarge
+iota_w = 2
+gamma_w = 4
+M = 992
+R = 496
+runtime_in_seconds = 73.53
+
+[Experiment Index 11]
+omega_w = r5.2xlarge
+iota_w = 3
+gamma_w = 8
+M = 240
+R = 120
+runtime_in_seconds = 22.36
+
+[Experiment Index 14]
+omega_w = r5.2xlarge
+iota_w = 3
+gamma_w = 8
+M = 4032
+R = 2016
+runtime_in_seconds = 216.17
+
+[Experiment Index 16]
+omega_w = r5.4xlarge
+iota_w = 6
+gamma_w = 16
+M = 56
+R = 28
+runtime_in_seconds = 14.13
+
+[Experiment Index 17]
+omega_w = r5.4xlarge
+iota_w = 1
+gamma_w = 16
+M = 240
+R = 120
+runtime_in_seconds = 23.17
+
+[Experiment Index 18]
+omega_w = r5.4xlarge
+iota_w = 2
+gamma_w = 16
+M = 56
+R = 28
+runtime_in_seconds = 14.43
+
+[Experiment Index 19]
+omega_w = r5.4xlarge
+iota_w = 3
+gamma_w = 16
+M = 56
+R = 28
+runtime_in_seconds = 14.11
+
+[Experiment Index 20]
+omega_w = r5.4xlarge
+iota_w = 4
+gamma_w = 16
+M = 56
+R = 28
+runtime_in_seconds = 14.07
+
+[Experiment Index 22]
+omega_w = r5.8xlarge
+iota_w = 1
+gamma_w = 32
+M = 56
+R = 28
+runtime_in_seconds = 14.4
+
+[Experiment Index 23]
+omega_w = r5.8xlarge
+iota_w = 2
+gamma_w = 32
+M = 4032
+R = 2016
+runtime_in_seconds = 238.73
+
+[Experiment Index 24]
+omega_w = r5.8xlarge
+iota_w = 6
+gamma_w = 32
+M = 4032
+R = 2016
+runtime_in_seconds = 235.59
+
+[Experiment Index 25]
+omega_w = r5.8xlarge
+iota_w = 4
+gamma_w = 32
+M = 4032
+R = 2016
+runtime_in_seconds = 237.52
+
+[Experiment Index 26]
+omega_w = r5.12xlarge
+iota_w = 4
+gamma_w = 48
+M = 992
+R = 496
+runtime_in_seconds = 59.92
+
+[Experiment Index 27]
+omega_w = r5.12xlarge
+iota_w = 1
+gamma_w = 48
+M = 240
+R = 120
+runtime_in_seconds = 21.72
+
+[Experiment Index 29]
+omega_w = r5.12xlarge
+iota_w = 3
+gamma_w = 48
+M = 4032
+R = 2016
+runtime_in_seconds = 233.22
+
+[Experiment Index 32]
+omega_w = r6i.large
+iota_w = 4
+gamma_w = 2
+M = 4032
+R = 2016
+runtime_in_seconds = 233.84
+
+[Experiment Index 33]
+omega_w = r6i.large
+iota_w = 5
+gamma_w = 2
+M = 56
+R = 28
+runtime_in_seconds = 15.34
+
+[Experiment Index 34]
+omega_w = r6i.large
+iota_w = 5
+gamma_w = 2
+M = 240
+R = 120
+runtime_in_seconds = 25.4
+
+[Experiment Index 37]
+omega_w = r6i.xlarge
+iota_w = 3
+gamma_w = 4
+M = 4032
+R = 2016
+runtime_in_seconds = 225.06
+
+[Experiment Index 39]
+omega_w = r6i.xlarge
+iota_w = 4
+gamma_w = 4
+M = 56
+R = 28
+runtime_in_seconds = 14.55
+
+[Experiment Index 40]
+omega_w = r6i.xlarge
+iota_w = 2
+gamma_w = 4
+M = 4032
+R = 2016
+runtime_in_seconds = 240.27
+
+[Experiment Index 42]
+omega_w = r6i.2xlarge
+iota_w = 1
+gamma_w = 8
+M = 56
+R = 28
+runtime_in_seconds = 14.25
+
+[Experiment Index 43]
+omega_w = r6i.2xlarge
+iota_w = 5
+gamma_w = 8
+M = 240
+R = 120
+runtime_in_seconds = 20.82
+
+[Experiment Index 44]
+omega_w = r6i.2xlarge
+iota_w = 1
+gamma_w = 8
+M = 992
+R = 496
+runtime_in_seconds = 66.18
+
+[Experiment Index 45]
+omega_w = r6i.2xlarge
+iota_w = 2
+gamma_w = 8
+M = 992
+R = 496
+runtime_in_seconds = 60.49
+
+[Experiment Index 46]
+omega_w = r6i.4xlarge
+iota_w = 6
+gamma_w = 16
+M = 992
+R = 496
+runtime_in_seconds = 58.29
+
+[Experiment Index 48]
+omega_w = r6i.4xlarge
+iota_w = 4
+gamma_w = 16
+M = 4032
+R = 2016
+runtime_in_seconds = 235.41
+
+[Experiment Index 49]
+omega_w = r6i.4xlarge
+iota_w = 5
+gamma_w = 16
+M = 240
+R = 120
+runtime_in_seconds = 20.5
+
+[Experiment Index 50]
+omega_w = r6i.4xlarge
+iota_w = 6
+gamma_w = 16
+M = 4032
+R = 2016
+runtime_in_seconds = 235.75
+
+[Experiment Index 51]
+omega_w = r6i.8xlarge
+iota_w = 4
+gamma_w = 32
+M = 4032
+R = 2016
+runtime_in_seconds = 236.24
+
+[Experiment Index 52]
+omega_w = r6i.8xlarge
+iota_w = 3
+gamma_w = 32
+M = 992
+R = 496
+runtime_in_seconds = 58.27
+
+[Experiment Index 53]
+omega_w = r6i.8xlarge
+iota_w = 2
+gamma_w = 32
+M = 240
+R = 120
+runtime_in_seconds = 20.35
+
+[Experiment Index 54]
+omega_w = r6i.8xlarge
+iota_w = 5
+gamma_w = 32
+M = 992
+R = 496
+runtime_in_seconds = 58.31
+
+[Experiment Index 55]
+omega_w = r6i.8xlarge
+iota_w = 2
+gamma_w = 32
+M = 4032
+R = 2016
+runtime_in_seconds = 234.42
+
+[Experiment Index 59]
+omega_w = r6i.12xlarge
+iota_w = 4
+gamma_w = 48
+M = 4032
+R = 2016
+runtime_in_seconds = 234.32
+
+[Experiment Index 60]
+omega_w = r6i.12xlarge
+iota_w = 3
+gamma_w = 48
+M = 4032
+R = 2016
+runtime_in_seconds = 237.69
+
+[Experiment Index 61]
+omega_w = z1d.large
+iota_w = 6
+gamma_w = 2
+M = 240
+R = 120
+runtime_in_seconds = 25.81
+
+[Experiment Index 63]
+omega_w = z1d.large
+iota_w = 5
+gamma_w = 2
+M = 4032
+R = 2016
+runtime_in_seconds = 226.08
+
+[Experiment Index 65]
+omega_w = z1d.large
+iota_w = 5
+gamma_w = 2
+M = 992
+R = 496
+runtime_in_seconds = 68.68
+
+[Experiment Index 66]
+omega_w = z1d.xlarge
+iota_w = 3
+gamma_w = 4
+M = 240
+R = 120
+runtime_in_seconds = 23.83
+
+[Experiment Index 67]
+omega_w = z1d.xlarge
+iota_w = 5
+gamma_w = 4
+M = 4032
+R = 2016
+runtime_in_seconds = 221.79
+
+[Experiment Index 69]
+omega_w = z1d.xlarge
+iota_w = 4
+gamma_w = 4
+M = 4032
+R = 2016
+runtime_in_seconds = 228.71
+
+[Experiment Index 71]
+omega_w = z1d.2xlarge
+iota_w = 2
+gamma_w = 8
+M = 240
+R = 120
+runtime_in_seconds = 22.65
+
+[Experiment Index 72]
+omega_w = z1d.2xlarge
+iota_w = 6
+gamma_w = 8
+M = 4032
+R = 2016
+runtime_in_seconds = 235.06
+
+[Experiment Index 74]
+omega_w = z1d.2xlarge
+iota_w = 6
+gamma_w = 8
+M = 992
+R = 496
+runtime_in_seconds = 58.95
+
+[Experiment Index 77]
+omega_w = z1d.3xlarge
+iota_w = 2
+gamma_w = 12
+M = 56
+R = 28
+runtime_in_seconds = 13.21
+
+[Experiment Index 79]
+omega_w = z1d.3xlarge
+iota_w = 4
+gamma_w = 12
+M = 56
+R = 28
+runtime_in_seconds = 12.75
+
+[Experiment Index 80]
+omega_w = z1d.3xlarge
+iota_w = 3
+gamma_w = 12
+M = 240
+R = 120
+runtime_in_seconds = 20.81
+
+[Experiment Index 81]
+omega_w = z1d.6xlarge
+iota_w = 4
+gamma_w = 24
+M = 4032
+R = 2016
+runtime_in_seconds = 231.75
+
+[Experiment Index 82]
+omega_w = z1d.6xlarge
+iota_w = 6
+gamma_w = 24
+M = 4032
+R = 2016
+runtime_in_seconds = 231.08
+
+[Experiment Index 83]
+omega_w = z1d.6xlarge
+iota_w = 4
+gamma_w = 24
+M = 992
+R = 496
+runtime_in_seconds = 57.91
+
+[Experiment Index 84]
+omega_w = z1d.6xlarge
+iota_w = 3
+gamma_w = 24
+M = 992
+R = 496
+runtime_in_seconds = 58.02
+
+[Experiment Index 85]
+omega_w = z1d.6xlarge
+iota_w = 6
+gamma_w = 24
+M = 992
+R = 496
+runtime_in_seconds = 57.84
+
+[Experiment Index 87]
+omega_w = z1d.12xlarge
+iota_w = 2
+gamma_w = 48
+M = 240
+R = 120
+runtime_in_seconds = 21.21
+
+[Experiment Index 88]
+omega_w = z1d.12xlarge
+iota_w = 4
+gamma_w = 48
+M = 992
+R = 496
+runtime_in_seconds = 57.86
+
+[Experiment Index 89]
+omega_w = z1d.12xlarge
+iota_w = 3
+gamma_w = 48
+M = 992
+R = 496
+runtime_in_seconds = 58.1
+
+[Experiment Index 90]
+omega_w = z1d.12xlarge
+iota_w = 4
+gamma_w = 48
+M = 4032
+R = 2016
+runtime_in_seconds = 233.49
+
