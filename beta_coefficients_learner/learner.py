@@ -1,5 +1,5 @@
 from configparser import ConfigParser
-from math import e, log
+from math import log
 from numpy import array, ndarray
 from pathlib import Path
 from scipy.optimize import nnls
@@ -102,24 +102,24 @@ class Learner:
 
     @staticmethod
     def __calculate_x1(M: int,
-                       Tc: int) -> float:
-        return M / Tc
+                       Ec: int) -> float:
+        return M / Ec
 
     @staticmethod
     def __calculate_x2(M: int,
                        R: int,
-                       Tc: int) -> float:
-        return (M * R) / Tc
+                       Ec: int) -> float:
+        return (M * R) / Ec
 
     @staticmethod
     def __calculate_x3(R: int,
-                       Tc: int) -> float:
-        return Tc / R
+                       Ec: int) -> float:
+        return Ec / R
 
     @staticmethod
     def __calculate_x4(M: int,
                        R: int) -> float:
-        return (M * log(M, e)) / R
+        return (M * log(M, 2)) / R
 
     @staticmethod
     def __calculate_x5(M: int,
@@ -169,11 +169,11 @@ class Learner:
                                                                     "iota_w"))
                 gamma_w = int(self.training_dataset_input_parser.get(section,
                                                                      "gamma_w"))
-                Tc = iota_w * gamma_w
+                Ec = iota_w * gamma_w
                 a_matrix.append([self.__calculate_x0(),
-                                 self.__calculate_x1(M, Tc),
-                                 self.__calculate_x2(M, R, Tc),
-                                 self.__calculate_x3(R, Tc),
+                                 self.__calculate_x1(M, Ec),
+                                 self.__calculate_x2(M, R, Ec),
+                                 self.__calculate_x3(R, Ec),
                                  self.__calculate_x4(M, R),
                                  self.__calculate_x5(M, R),
                                  self.__calculate_x6(M),
@@ -210,7 +210,7 @@ class Learner:
         print("NNLS problem solved!\nBETA COEFFICIENTS:")
         for i in range(len(beta_coefficients_list)):
             print("   - β{0}: {1}".format(i,
-                                     str(beta_coefficients_list[i])))
+                                          str(beta_coefficients_list[i])))
         print("-------")
         return beta_coefficients
 
@@ -218,7 +218,7 @@ class Learner:
                                        beta_coefficients: ndarray,
                                        M: int,
                                        R: int,
-                                       Tc: int) -> float:
+                                       Ec: int) -> float:
         beta0 = beta_coefficients[0]
         beta1 = beta_coefficients[1]
         beta2 = beta_coefficients[2]
@@ -228,9 +228,9 @@ class Learner:
         beta6 = beta_coefficients[6]
         beta7 = beta_coefficients[7]
         x0 = self.__calculate_x0()
-        x1 = self.__calculate_x1(M, Tc)
-        x2 = self.__calculate_x2(M, R, Tc)
-        x3 = self.__calculate_x3(R, Tc)
+        x1 = self.__calculate_x1(M, Ec)
+        x2 = self.__calculate_x2(M, R, Ec)
+        x3 = self.__calculate_x3(R, Ec)
         x4 = self.__calculate_x4(M, R)
         x5 = self.__calculate_x5(M, R)
         x6 = self.__calculate_x6(M)
@@ -257,8 +257,8 @@ class Learner:
                                                                    "iota_w"))
                 gamma_w = int(self.testing_dataset_input_parser.get(section,
                                                                     "gamma_w"))
-                Tc = iota_w * gamma_w
-                T = self.__calculate_time_cost_function(beta_coefficients, M, R, Tc)
+                Ec = iota_w * gamma_w
+                T = self.__calculate_time_cost_function(beta_coefficients, M, R, Ec)
                 predicted_y.append(T)
         loaded_predicted_y_message = "Successfully calculated 'predicted_y' applying the learned Beta coefficients " \
                                      "into the experiments from the '{0}' file.\n-------" \
