@@ -1,6 +1,6 @@
 from configparser import ConfigParser
 from gurobipy import Env, GRB, Model
-from math import ceil, e, inf, log
+from math import ceil, inf, log
 from pathlib import Path
 from time import time
 
@@ -30,9 +30,9 @@ class Optimizer:
         self.gamma_w = 0
         self.phi = 0.0
         self.tau = 0.0
-        self.Tc = 0
-        self.Tc_lower_bound = 0
-        self.Tc_upper_bound = 0
+        self.Ec = 0
+        self.Ec_lower_bound = 0
+        self.Ec_upper_bound = 0
         self.monetary_unit = None
         self.time_unit = None
         self.alfa_zero = 0.0
@@ -233,34 +233,34 @@ class Optimizer:
         self.phi = self.__get_phi(crespark_optimizer_config_parser)
         self.tau = self.__get_tau(crespark_optimizer_config_parser)
 
-    def __get_Tc_bounds(self,
+    def __get_Ec_bounds(self,
                         crespark_optimizer_config_parser: ConfigParser) -> list:
-        exception_message = "{0}: 'Tc' (Total Number of Available Cores) must have valid integer bounds!" \
+        exception_message = "{0}: 'Ec' (Total Number of Available Executors Cores) must have valid integer bounds!" \
             .format(self.crespark_optimizer_config_file)
-        Tc_bounds = []
+        Ec_bounds = []
         try:
-            Tc_bounds_list = crespark_optimizer_config_parser.get("Decision Variables Bounds",
-                                                                  "Tc") \
+            Ec_bounds_list = crespark_optimizer_config_parser.get("Decision Variables Bounds",
+                                                                  "Ec") \
                 .split("...")
-            Tc_lower = int(Tc_bounds_list[0])
-            if Tc_lower <= 0:
+            Ec_lower = int(Ec_bounds_list[0])
+            if Ec_lower <= 0:
                 raise ValueError(exception_message)
             else:
-                Tc_bounds.append(Tc_lower)
-            Tc_higher = int(Tc_bounds_list[1])
-            if Tc_higher <= 0 or Tc_higher < Tc_lower:
+                Ec_bounds.append(Ec_lower)
+            Ec_higher = int(Ec_bounds_list[1])
+            if Ec_higher <= 0 or Ec_higher < Ec_lower:
                 raise ValueError(exception_message)
             else:
-                Tc_bounds.append(Tc_higher)
+                Ec_bounds.append(Ec_higher)
         except ValueError:
             raise ValueError(exception_message)
-        return Tc_bounds
+        return Ec_bounds
 
-    def __load_Tc_bounds(self) -> None:
+    def __load_Ec_bounds(self) -> None:
         crespark_optimizer_config_parser = self.__get_crespark_optimizer_config_parser()
-        Tc_bounds = self.__get_Tc_bounds(crespark_optimizer_config_parser)
-        self.Tc_lower_bound = Tc_bounds[0]
-        self.Tc_upper_bound = Tc_bounds[1]
+        Ec_bounds = self.__get_Ec_bounds(crespark_optimizer_config_parser)
+        self.Ec_lower_bound = Ec_bounds[0]
+        self.Ec_upper_bound = Ec_bounds[1]
 
     def __get_monetary_unit(self,
                             crespark_optimizer_config_parser: ConfigParser) -> str:
@@ -310,7 +310,7 @@ class Optimizer:
 
     def __calculate_alfa_constants(self) -> None:
         self.alfa_zero = self.beta_zero + \
-                         self.beta_four * ((self.M * log(self.M, e)) / self.R) + \
+                         self.beta_four * ((self.M * log(self.M, 2)) / self.R) + \
                          self.beta_five * (self.M / self.R) + \
                          self.beta_six * self.M + \
                          self.beta_seven * self.R
@@ -367,8 +367,8 @@ class Optimizer:
         self.optimization_modes = self.__get_optimization_modes(crespark_optimizer_config_parser)
 
     def __calculate_time_cost_function(self,
-                                       Tc: int) -> float:
-        T = self.alfa_zero + self.alfa_one / Tc + self.alfa_two / Tc + self.alfa_three * Tc
+                                       Ec: int) -> float:
+        T = self.alfa_zero + self.alfa_one / Ec + self.alfa_two / Ec + self.alfa_three * Ec
         if self.time_unit == "hour":
             T = T / 3600
         elif self.time_unit == "minute":
@@ -377,8 +377,8 @@ class Optimizer:
 
     def __calculate_monetary_cost(self,
                                   T: float,
-                                  Tc: int) -> float:
-        C = (self.iota_m * self.upsilon_m * T) + (ceil(Tc / self.gamma_w) * self.upsilon_w * T)
+                                  Ec: int) -> float:
+        C = (self.iota_m * self.upsilon_m * T) + (ceil(Ec / self.gamma_w) * self.upsilon_w * T)
         return C
 
     def __is_constraint_not_violated(self,
@@ -390,43 +390,43 @@ class Optimizer:
             return T <= self.tau
 
     def __reset_model_results(self) -> None:
-        self.Tc = 0
+        self.Ec = 0
         self.T = inf
         self.C = inf
         self.iota_w = 0
 
     def __optimize_model_with_brute_force(self) -> None:
         if self.optimization_problem == 1:
-            # Minimize T(M, R, Tc)
+            # Minimize T(M, R, Ec)
             # Subject To
-            # C(T, Tc) ≤ phi
-            for Tc_candidate in range(self.Tc_lower_bound, self.Tc_upper_bound + 1):
-                T_candidate = self.__calculate_time_cost_function(Tc_candidate)
-                C_candidate = self.__calculate_monetary_cost(T_candidate, Tc_candidate)
+            # C(T, Ec) ≤ phi
+            for Ec_candidate in range(self.Ec_lower_bound, self.Ec_upper_bound + 1):
+                T_candidate = self.__calculate_time_cost_function(Ec_candidate)
+                C_candidate = self.__calculate_monetary_cost(T_candidate, Ec_candidate)
                 if self.__is_constraint_not_violated(C_candidate, T_candidate):
                     if T_candidate < self.T:
-                        self.Tc = Tc_candidate
+                        self.Ec = Ec_candidate
                         self.T = T_candidate
                         self.C = C_candidate
         elif self.optimization_problem == 2:
-            # Minimize C(T, Tc)
+            # Minimize C(T, Ec)
             # Subject To
-            # T(M, R, Tc) ≤ tau
-            for Tc_candidate in range(self.Tc_lower_bound, self.Tc_upper_bound + 1):
-                T_candidate = self.__calculate_time_cost_function(Tc_candidate)
-                C_candidate = self.__calculate_monetary_cost(T_candidate, Tc_candidate)
+            # T(M, R, Ec) ≤ tau
+            for Ec_candidate in range(self.Ec_lower_bound, self.Ec_upper_bound + 1):
+                T_candidate = self.__calculate_time_cost_function(Ec_candidate)
+                C_candidate = self.__calculate_monetary_cost(T_candidate, Ec_candidate)
                 if self.__is_constraint_not_violated(C_candidate, T_candidate):
                     if C_candidate < self.C:
-                        self.Tc = Tc_candidate
+                        self.Ec = Ec_candidate
                         self.T = T_candidate
                         self.C = C_candidate
         elif self.optimization_problem == 3:
-            # Minimize C(T, Tc)
-            for Tc_candidate in range(self.Tc_lower_bound, self.Tc_upper_bound + 1):
-                T_candidate = self.__calculate_time_cost_function(Tc_candidate)
-                C_candidate = self.__calculate_monetary_cost(T_candidate, Tc_candidate)
+            # Minimize C(T, Ec)
+            for Ec_candidate in range(self.Ec_lower_bound, self.Ec_upper_bound + 1):
+                T_candidate = self.__calculate_time_cost_function(Ec_candidate)
+                C_candidate = self.__calculate_monetary_cost(T_candidate, Ec_candidate)
                 if C_candidate < self.C:
-                    self.Tc = Tc_candidate
+                    self.Ec = Ec_candidate
                     self.T = T_candidate
                     self.C = C_candidate
 
@@ -436,11 +436,11 @@ class Optimizer:
             # Set Model Parameters
             model.setParam("NonConvex", 2)
             # Set Model Decision Variables
-            # Tc (Total Number of Executors Cores)
-            Tc = model.addVar(name="Tc",
+            # Ec (Total Number of Executors Cores)
+            Ec = model.addVar(name="Ec",
                               vtype=GRB.INTEGER,
-                              lb=self.Tc_lower_bound,
-                              ub=self.Tc_upper_bound,
+                              lb=self.Ec_lower_bound,
+                              ub=self.Ec_upper_bound,
                               obj=0,
                               column=None)
             # z0 = α0
@@ -450,87 +450,87 @@ class Optimizer:
                               ub=inf,
                               obj=0,
                               column=None)
-            # z1 = α1 / Tc -> z1 * Tc = α1
+            # z1 = α1 / Ec -> z1 * Ec = α1
             z1 = model.addVar(name="z1",
                               vtype=GRB.CONTINUOUS,
                               lb=0,
                               ub=inf,
                               obj=0,
                               column=None)
-            # z2 = α2 / Tc -> z2 * Tc = α2
+            # z2 = α2 / Ec -> z2 * Ec = α2
             z2 = model.addVar(name="z2",
                               vtype=GRB.CONTINUOUS,
                               lb=0,
                               ub=inf,
                               obj=0,
                               column=None)
-            # z3 = α3 * Tc
+            # z3 = α3 * Ec
             z3 = model.addVar(name="z3",
                               vtype=GRB.CONTINUOUS,
                               lb=0,
                               ub=inf,
                               obj=0,
                               column=None)
-            # z4 = ceil(Tc / self.gamma_w)
+            # z4 = ceil(Ec / self.gamma_w)
             z4 = model.addVar(name="z4",
                               vtype=GRB.INTEGER,
                               lb=0,
                               ub=inf,
                               obj=0,
                               column=None)
-            # Set Time Cost Function: T(M, R, Tc) = α0 + (α1 / Tc) + (α2 / Tc) + (α3 * Tc)
+            # Set Time Cost Function: T(M, R, Ec) = α0 + (α1 / Ec) + (α2 / Ec) + (α3 * Ec)
             T = z0 + z1 + z2 + z3
             if self.time_unit == "hour":
                 T = T / 3600
             elif self.time_unit == "minute":
                 T = T / 60
-            # Set Monetary Cost Function: C(T, Tc) = (iota_m * upsilon_m * T) + (z4 * upsilon_w * T)
-            # where z4 = ceil(Tc / self.gamma_w)
+            # Set Monetary Cost Function: C(T, Ec) = (iota_m * upsilon_m * T) + (z4 * upsilon_w * T)
+            # where z4 = ceil(Ec / self.gamma_w)
             C = (self.iota_m * self.upsilon_m * T) + (z4 * self.upsilon_w * T)
             # Set Model Objective and Constraints
             if self.optimization_problem == 1:
-                # Minimize T(M, R, Tc)
+                # Minimize T(M, R, Ec)
                 # Subject To
-                # C(T, Tc) ≤ phi
+                # C(T, Ec) ≤ phi
                 model.setObjective(T, GRB.MINIMIZE)
-                # Constraint 'c0': C(T, Tc) ≤ phi
+                # Constraint 'c0': C(T, Ec) ≤ phi
                 model.addConstr(C <= self.phi, "c0")
             elif self.optimization_problem == 2:
-                # Minimize C(T, Tc)
+                # Minimize C(T, Ec)
                 # Subject To
-                # T(M, R, Tc) ≤ tau
+                # T(M, R, Ec) ≤ tau
                 model.setObjective(C, GRB.MINIMIZE)
-                # Constraint 'c0': T(M, R, Tc) ≤ tau
+                # Constraint 'c0': T(M, R, Ec) ≤ tau
                 model.addConstr(T <= self.tau, "c0")
             elif self.optimization_problem == 3:
-                # Minimize C(T, Tc)
+                # Minimize C(T, Ec)
                 model.setObjective(C, GRB.MINIMIZE)
             # Constraint 'c1': z0 = α0
             model.addConstr(self.alfa_zero == z0, "c1")
-            # Constraint 'c2': z1 = α1 / Tc -> z1 * Tc = α1
-            model.addConstr(self.alfa_one == z1 * Tc, "c2")
-            # Constraint 'c3': z2 = α2 / Tc -> z2 * Tc = α2
-            model.addConstr(self.alfa_two == z2 * Tc, "c3")
-            # Constraint 'c4': z3 = α3 * Tc
-            model.addConstr(self.alfa_three * Tc == z3, "c4")
-            # Constraint 'c5': z4 ≥ (Tc / self.gamma_w)
-            model.addConstr((Tc / self.gamma_w) <= z4, "c5")
-            # Constraint 'c6': z4 ≤ (Tc / self.gamma_w) + 0.999
-            model.addConstr((Tc / self.gamma_w) + 0.999 >= z4, "c6")
+            # Constraint 'c2': z1 = α1 / Ec -> z1 * Ec = α1
+            model.addConstr(self.alfa_one == z1 * Ec, "c2")
+            # Constraint 'c3': z2 = α2 / Ec -> z2 * Ec = α2
+            model.addConstr(self.alfa_two == z2 * Ec, "c3")
+            # Constraint 'c4': z3 = α3 * Ec
+            model.addConstr(self.alfa_three * Ec == z3, "c4")
+            # Constraint 'c5': z4 ≥ (Ec / self.gamma_w)
+            model.addConstr((Ec / self.gamma_w) <= z4, "c5")
+            # Constraint 'c6': z4 ≤ (Ec / self.gamma_w) + 0.999
+            model.addConstr((Ec / self.gamma_w) + 0.999 >= z4, "c6")
             # Optimize Model
             model.optimize()
             # If Model is Feasible (Found Optimal Value, GRB.OPTIMAL)...
             if model.status == 2:
                 for v in model.getVars():
-                    if str(v.varName) == "Tc":
-                        self.Tc = ceil(v.x)
+                    if str(v.varName) == "Ec":
+                        self.Ec = ceil(v.x)
                 self.T = T.getValue()
-                self.C = self.__calculate_monetary_cost(self.T, self.Tc)
+                self.C = self.__calculate_monetary_cost(self.T, self.Ec)
             del env
             del model
 
     def __calculate_optimal_number_of_worker_nodes(self) -> None:
-        self.iota_w = ceil(self.Tc / self.gamma_w)
+        self.iota_w = ceil(self.Ec / self.gamma_w)
 
     def __calculate_total_number_of_available_executors_cores(self) -> int:
         return self.iota_w * self.gamma_w
@@ -540,7 +540,7 @@ class Optimizer:
                                      optimization_time_in_seconds: time) -> None:
         print("-------------------- {0} ({1} seconds) -------------------".format(optimization_mode.upper(),
                                                                                   optimization_time_in_seconds))
-        if self.Tc > 0:
+        if self.Ec > 0:
             print("OPTIMIZATION RESULTS:")
             print("1) Homogeneous Spark Cluster Setup")
             number_of_master_nodes_message = \
@@ -556,8 +556,8 @@ class Optimizer:
             print("2) Suggested Application Submission Settings")
             total_number_of_available_executors_cores = self.__calculate_total_number_of_available_executors_cores()
             number_of_available_worker_cores_message = \
-                "   - Number of Executors Cores (Optimal Tc): {0} (out of {1} available)" \
-                .format(self.Tc,
+                "   - Number of Executors Cores (Optimal Ec): {0} (out of {1} available)" \
+                .format(self.Ec,
                         total_number_of_available_executors_cores)
             print(number_of_available_worker_cores_message)
             print("3) Application Execution Predictions")
@@ -606,8 +606,8 @@ class Optimizer:
         # phi: Monetary Budget Constraint (φ)
         # tau: Deadline Constraint (τ)
         self.__load_input_parameters()
-        # Load Tc Bounds (Lower and Upper)
-        self.__load_Tc_bounds()
+        # Load Ec Bounds (Lower and Upper)
+        self.__load_Ec_bounds()
         # Load Monetary Unit [USD]
         self.__load_monetary_unit()
         # Load Time Unit [second | minute | hour]
