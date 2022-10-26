@@ -3,7 +3,7 @@ from math import log
 from numpy import array, ndarray
 from pathlib import Path
 from scipy.optimize import nnls
-from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+from sklearn.metrics import mean_absolute_error, mean_absolute_percentage_error, mean_squared_error, r2_score
 
 
 class Learner:
@@ -269,24 +269,34 @@ class Learner:
     @staticmethod
     def __get_and_print_regression_metrics_scores(actual_y: list,
                                                   predicted_y: list) -> None:
+        regression_metrics_list = ["MAE", "MAPE", "RMSE", "R-SQUARED"]
         print("REGRESSION MODEL METRICS:")
-        # Mean Absolute Error (MAE)
-        mae = mean_absolute_error(actual_y,
-                                  predicted_y)
-        print("1) Mean Absolute Error (MAE): {0} (Best: 0.0)".format(str(mae)))
-        # Mean Squared Error (MSE)
-        mse = mean_squared_error(actual_y,
-                                 predicted_y)
-        print("2) Mean Squared Error (MSE): {0} (Best: 0.0)".format(str(mse)))
-        # Root Mean Squared Error (RMSE)
-        rmse = mean_squared_error(actual_y,
-                                  predicted_y,
-                                  squared=False)
-        print("3) Root Mean Squared Error (RMSE): {0} (Best: 0.0)".format(str(rmse)))
-        # R² Score (Coefficient of Determination)
-        r2 = r2_score(actual_y,
-                      predicted_y)
-        print("4) R² Score (Coefficient of Determination): {0} (Best: 1.0)\n-------".format(str(r2)))
+        if "MAE" in regression_metrics_list:
+            # Mean Absolute Error (MAE)
+            mae = mean_absolute_error(actual_y,
+                                      predicted_y)
+            print("   - Mean Absolute Error (MAE): {0} (Best: 0.0)".format(str(mae)))
+        if "MAPE" in regression_metrics_list:
+            # Mean Absolute Percentage Error (MAPE)
+            mape = mean_absolute_percentage_error(actual_y,
+                                                  predicted_y)
+            print("   - Mean Absolute Percentage Error (MAPE): {0}% (Best: 0.0%)".format(str(round((mape * 100), 2))))
+        if "MSE" in regression_metrics_list:
+            # Mean Squared Error (MSE)
+            mse = mean_squared_error(actual_y,
+                                     predicted_y)
+            print("   - Mean Squared Error (MSE): {0} (Best: 0.0)".format(str(mse)))
+        if "RMSE" in regression_metrics_list:
+            # Root Mean Squared Error (RMSE)
+            rmse = mean_squared_error(actual_y,
+                                      predicted_y,
+                                      squared=False)
+            print("   - Root Mean Squared Error (RMSE): {0} (Best: 0.0)".format(str(rmse)))
+        if "R-SQUARED" in regression_metrics_list:
+            # R² Score (Coefficient of Determination)
+            r2 = r2_score(actual_y,
+                          predicted_y)
+            print("   - R² Score (Coefficient of Determination): {0} (Best: 1.0)\n-------".format(str(r2)))
 
     def __update_beta_coefficients_on_crespark_optimizer_config_file(self,
                                                                      beta_coefficients: ndarray) -> None:
